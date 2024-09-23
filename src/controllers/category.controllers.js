@@ -1,8 +1,17 @@
-const getCategories = ( req, res ) => {
-    res.json({
-        ok: true,
-        msg: 'Obtiene todas las categorias'
-    });
+const { handleResponseSuccess, handleResponseError } = require("../helpers/handleResponses");
+const { dbGetCategories } = require("../services/category.service");
+
+const getCategories = async ( req, res ) => {
+
+    try {
+        const data = await dbGetCategories();
+        
+        handleResponseSuccess( res, 200, data );
+    } 
+    catch ( error ) {
+        handleResponseError( res, 500, 'Error al obtener todas las categorias', error );
+    }
+
 }
 
 const getCategoryById = ( req, res ) => {
