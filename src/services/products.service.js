@@ -58,6 +58,10 @@ async function dbUpdateProductByIdPut( id, updateProduct ) {
     );
 }
 
+async function dbCountRecords( filter = {} ) {
+    return await ProductModel.countDocuments( filter );          // Total de los productos (Documents)
+}
+
 
 module.exports = {
     dbCreateProduct,
@@ -66,5 +70,6 @@ module.exports = {
     dbGetProductById,
     dbRemoveProductById,
     dbUpdateProductByIdPatch,
-    dbUpdateProductByIdPut
+    dbUpdateProductByIdPut,
+    dbCountRecords
 }
