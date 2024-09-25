@@ -1,5 +1,7 @@
 const { handleResponseSuccess, handleResponseError } = require("../helpers/handleResponses");
-const { dbGetCategories } = require("../services/category.service");
+const { dbGetCategories, dbCreateCategory, dbGetCategoryById, dbRemoveCategoryById, dbUpdateCategoryById, dbGetPaginatedCategories, dbCountRecords } = require("../services/category.service");
+
+
 
 const getCategories = async ( req, res ) => {
 
@@ -14,32 +16,89 @@ const getCategories = async ( req, res ) => {
 
 }
 
-const getCategoryById = ( req, res ) => {
-    res.json({
-        ok: true,
-        msg: 'Obtiene una categoria por ID'
-    });
+const getCategoryById = async ( req, res ) => {
+    const categoryId = req.params.id;
+
+    try {
+        const data = await dbGetCategoryById( categoryId );
+
+        if( ! data ) {
+            return handleResponseError( res, 404, 'Categoria no encontrada' );
+        }
+
+        handleResponseSuccess( res, 200, data );     
+    } 
+    catch ( error ) {
+        handleResponseError( res, 500, 'Error al obtener una categoria por ID', error );
+    }
+
 }
 
-const createCategory = ( req, res ) => {
-    res.json({
-        ok: true,
-        msg: 'Crea una categoria nueva'
-    });
+const createCategory = async ( req, res ) => {
+    const inputData = req.body;                     // Obteniendo los datos de la peticion
+
+    try {
+        const data = await dbCreateCategory( inputData );  
+        
+        handleResponseSuccess( res, 201, data );
+    } 
+    catch ( error ) {
+        handleResponseError( res, 500, 'Error al crear la categoria nueva', error );
+    }
+    
 }
 
-const updateCategoryById = ( req, res ) => {
-    res.json({
-        ok: true,
-        msg: 'Actualiza una categoria por ID'
-    });
+const updateCategoryById = async ( req, res ) => {
+    const categoryId = req.params.id;
+    const inputData = req.body;
+
+    try {
+        const data = await dbUpdateCategoryById( categoryId, inputData );
+
+        if( ! data ) {
+            return handleResponseError( res, 404, 'Categoria no encontrada' );
+        }
+
+        handleResponseSuccess( res, 200, data );
+    } 
+    catch ( error ) {
+        handleResponseError( res, 500, 'Error al actualizar parcialmente la categoria', error );
+    }
+
 }
 
-const removeCategoryById = ( req, res ) => {
-    res.json({
-        ok: true,
-        msg: 'Elimina un producto por ID'
-    });
+const removeCategoryById = async ( req, res ) => {
+    const categoryId = req.params.id;
+
+    try {
+        const data = await dbRemoveCategoryById( categoryId ); 
+        
+        if( ! data ) {
+            return handleResponseError( res, 404, 'Categoria no encontrada' );
+        }
+
+        handleResponseSuccess( res, 200, data );
+    } 
+    catch ( error ) {
+        handleResponseError( res, 500, 'Error al eliminar categoria por ID', error );
+    }
+    
+}
+
+const getPaginatedCategories = async ( req, res ) => {
+    const page = parseInt( req.params.page ) ?? 1;
+    const pageSize = parseInt( req.params.pageSize) ?? 10;
+
+    try {
+        const total = await dbCountRecords();
+        const data =  await dbGetPaginatedCategories( page, pageSize );
+
+        handleResponseSuccess( res, 200, { page, pageSize, data, total });
+    } 
+    catch ( error ) {
+        handleResponseError( res, 500, 'Error al obtener las categorias', error );
+    }
+
 }
 
 
@@ -48,5 +107,6 @@ module.exports = {
     getCategoryById,
     createCategory,
     updateCategoryById,
-    removeCategoryById
+    removeCategoryById,
+    getPaginatedCategories
 }
