@@ -13,6 +13,7 @@ async function dbGetProducts () {
 
 async function dbGetPaginatedProducts ( page, pageSize, filter ) {
     return await ProductModel.find( filter )
+        .populate( ['category', 'userId'] )
         .skip( ( page - 1 ) * pageSize )
         .limit( pageSize )
         .sort({ createAt: -1 });

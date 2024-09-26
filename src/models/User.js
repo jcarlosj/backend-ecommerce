@@ -26,7 +26,7 @@ const UserSchema = new Schema({
 });
 
 /** Crear el modelo de datos a partir de la estructura de datos */
-const UserModel = model( 'Users', UserSchema );
+const UserModel = model( 'users', UserSchema );
 
 
 module.exports = UserModel;
