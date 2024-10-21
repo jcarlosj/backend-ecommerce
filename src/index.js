@@ -1,4 +1,6 @@
 const express = require( 'express' );
+const cors = require( 'cors' );
+
 const { dbConnection } = require('./config/mongo.config');
 const app = express();
 const PORT = process.env.PORT;
@@ -6,6 +8,7 @@ const PORT = process.env.PORT;
 /** Middleware */
 app.use( express.static( 'views' ) );
 app.use( express.json() );      // Ampliamos la capacidad de interpretar y entender JSON
+app.use( cors() );
 
 /** Definir nuestras rutas o endpoints */
 app.use( '/', require( './routes/pages.routes' ) );                         // http://localhost:3000/
