@@ -22,7 +22,17 @@ const registerUser = async ( newUser ) => {
     console.log( 'Data procesada por la clase UserModel: ', dbUser );
 
     // Paso 3: Guarda en la Base de datos y retorna los datos del documento registrado
-    return await dbUser.save();           
+    const bjsonUser = await dbUser.save();           
+
+    // Paso 4: Convertir un BJSON en un Objeto de JavaScript
+    const objUser = bjsonUser.toObject();
+
+    // Paso 5: Eliminar las propiedades que no deseo que obtenga el cliente
+    delete objUser.createdAt;
+    delete objUser.updatedAt;
+    delete objUser.password;
+
+    return objUser;
 }
 
 

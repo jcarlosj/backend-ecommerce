@@ -22,7 +22,8 @@ const UserSchema = new Schema({
         default: 'registered'
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 /** Crear el modelo de datos a partir de la estructura de datos */
