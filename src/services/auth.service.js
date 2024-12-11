@@ -4,7 +4,10 @@ const { encryptedPassword } = require('../helpers/bcrypt.helper');
 
 const dbGetUserByUsername = async ( email ) => {
 
-    return await UserModel.findOne({ username: email });
+    return await UserModel.findOne(
+        { username: email }, 
+        { createdAt: 0, updatedAt: 0 }      // Indicamos que campos deseamos que sean excluidos del objeto de respuesta del query
+    );
 }
 
 const registerUser = async ( newUser ) => {
