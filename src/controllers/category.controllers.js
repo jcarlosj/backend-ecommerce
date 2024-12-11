@@ -8,7 +8,7 @@ const getCategories = async ( req, res ) => {
     try {
         const data = await dbGetCategories();
         
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al obtener todas las categorias', error );
@@ -26,7 +26,7 @@ const getCategoryById = async ( req, res ) => {
             return handleResponseError( res, 404, 'Categoria no encontrada' );
         }
 
-        handleResponseSuccess( res, 200, data );     
+        handleResponseSuccess( res, 200, { data } );     
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al obtener una categoria por ID', error );
@@ -40,7 +40,7 @@ const createCategory = async ( req, res ) => {
     try {
         const data = await dbCreateCategory( inputData );  
         
-        handleResponseSuccess( res, 201, data );
+        handleResponseSuccess( res, 201, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al crear la categoria nueva', error );
@@ -59,7 +59,7 @@ const updateCategoryById = async ( req, res ) => {
             return handleResponseError( res, 404, 'Categoria no encontrada' );
         }
 
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al actualizar parcialmente la categoria', error );
@@ -77,7 +77,7 @@ const removeCategoryById = async ( req, res ) => {
             return handleResponseError( res, 404, 'Categoria no encontrada' );
         }
 
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al eliminar categoria por ID', error );
