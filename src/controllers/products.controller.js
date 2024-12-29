@@ -10,7 +10,7 @@ async function getProducts( req, res ) {            // ---> http://localhost:300
     try {
         const data = await dbGetProducts();
 
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {       // Capturando la excepcion
         handleResponseError( res, 500, 'Error al obtener todos los productos', error  );   
@@ -33,7 +33,7 @@ async function getPaginatedProducts( req, res ) {
 
         console.log( page, pageSize, data );
 
-        handleResponseSuccess( res, 200, { page, pageSize, data, total })
+        handleResponseSuccess( res, 200, { page, pageSize, data, total } );
     
     } 
     catch ( error ) {
@@ -52,7 +52,7 @@ async function getProductById( req, res ) {
             return handleResponseError( res, 404, 'Producto no encontrado' );
         }
 
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al obtener un producto por ID', error );
@@ -74,7 +74,7 @@ async function createProduct( req, res ) {
         const data = await dbCreateProduct( inputData );
         // console.log( '>> data >>', data );
 
-        handleResponseSuccess( res, 201, data );
+        handleResponseSuccess( res, 201, { data } );
     } 
     catch ( error ) {       // Capturando la excepcion
         handleResponseError( res, 500, 'Error al crear un producto nuevo', error );
@@ -94,7 +94,7 @@ async function updateProductByIdPatch( req, res ) {
             return handleResponseError( res, 404, 'Producto no encontrado' );
         }
 
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al actualizar parcialmente el producto por ID', error );
@@ -114,7 +114,7 @@ async function updateProductByIdPut( req, res ) {
             return handleResponseError( res, 404, 'Producto no encontrado' );
         }
     
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al actualizar totalmente el producto por ID', error );
@@ -132,7 +132,7 @@ async function removeProductById( req, res ) {
             return handleResponseError( res, 404, 'Producto no encontrado' );
         }
 
-        handleResponseSuccess( res, 200, data );
+        handleResponseSuccess( res, 200, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al eliminar un producto por ID', error );

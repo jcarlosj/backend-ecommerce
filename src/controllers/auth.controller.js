@@ -23,7 +23,7 @@ const register = async ( req, res ) => {
         // Paso Opcional: General Token con usuario registrado 'data'
 
         // Paso 4: Responder al cliente, si el usuario a sido registrado (Opcional enviar el Token para acceder al sistema)
-        handleResponseSuccess( res, 201, data );
+        handleResponseSuccess( res, 201, { data } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al verificar y registrar el usuario existe', error );
@@ -58,8 +58,16 @@ const login = async ( req, res ) => {
             role: userFound.role
         });
 
-        // Paso 5: Responder al cliente enviandole el Token
-        handleResponseSuccess( res, 200, token );
+        // Paso 5: Eliminar las propiedades que no deseamos enviar al cliente
+        const objUserFound = userFound.toObject();  // Convertir un BJSON --> JavaScript Object
+
+        delete objUserFound.password;
+        delete objUserFound.createdAt;
+        delete objUserFound.updatedAt;
+
+
+        // Paso 6: Responder al cliente enviandole el Token
+        handleResponseSuccess( res, 200, { data: objUserFound, token } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Error al autenticar el usuario', error );
@@ -77,7 +85,7 @@ const reNewToken = ( req, res ) => {
         // console.log( payload );
 
         // Paso 2: Reenviar el token nuevo al cliente 
-        handleResponseSuccess( res, 200, newToken );
+        handleResponseSuccess( res, 200, { newToken } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Token no valido', error );
