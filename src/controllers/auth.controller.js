@@ -75,17 +75,34 @@ const login = async ( req, res ) => {
 
 }
 
-const reNewToken = ( req, res ) => {
-    
+const reNewToken = async ( req, res ) => {
     const payload = req.authUser;
 
     try {
-        // Paso 1: Renovar el Token
-        const newToken = generateToken( payload );
-        // console.log( payload );
+        // Paso 1: Verificar si el usuario existe DB ---> email
+        const userFound = await dbGetUserByUsername( payload.username );
 
-        // Paso 2: Reenviar el token nuevo al cliente 
-        handleResponseSuccess( res, 200, { newToken } );
+        if( ! userFound ) {
+            return handleResponseError( res, 404, 'El usuario no esta registrado. Por favor registrese!' );
+        } 
+
+        // Paso 2: Renovar el Token
+        const token = generateToken({
+            id: userFound._id,
+            username: userFound.username,
+            name: userFound.name,
+            role: userFound.role
+        });
+
+        // Paso 3: Eliminar las propiedades que no deseamos enviar al cliente
+        const objUserFound = userFound.toObject();  // Convertir un BJSON --> JavaScript Object
+
+        delete objUserFound.password;
+        delete objUserFound.createdAt;
+        delete objUserFound.updatedAt;
+
+        // Paso 4: Reenviar el token nuevo al cliente 
+        handleResponseSuccess( res, 200, { token, data: objUserFound } );
     } 
     catch ( error ) {
         handleResponseError( res, 500, 'Token no valido', error );
